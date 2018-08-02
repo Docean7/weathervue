@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <v-app>
-        <card-list></card-list>
-    </v-app>
+    <card-list></card-list>
   </div>
 </template>
 

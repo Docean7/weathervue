@@ -1,25 +1,25 @@
 <template>
-  <v-container grid-list-md>
-    <v-layout justify-center>
-    <v-flex xs12 sm6 d-flex>
-      <v-select
-        v-model="selected"
-        item-text="name"
-        item-value="id"
-        :items="cities"
-        label="Select city"
-      ></v-select>
-    </v-flex>
-    <div class="text-xs-center">
-      <v-btn @click="addCard" round color="primary" dark>Add city</v-btn>
-    </div>
-    </v-layout>
-    <v-layout justify-space-around wrap>
-      <v-flex md6>
-        <card v-for="card in cards" :key="card" :cityId="card" @delete-event="deleteCard"></card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <v-app>
+    <v-container grid-list-md>
+      <v-layout justify-center>
+        <v-flex xs12 sm6 d-flex>
+          <v-select
+            v-model="selected"
+            item-text="name"
+            item-value="id"
+            :items="cities"
+            label="Select city"
+          ></v-select>
+        </v-flex>
+        <div class="text-xs-center">
+          <v-btn @click="addCard" round color="primary" dark>Add city</v-btn>
+        </div>
+      </v-layout>
+      <v-layout align-center justify-space-around wrap>
+        <card class="my-4" v-for="card in cards" :key="card" :cityId="card" @delete-event="deleteCard"></card>
+      </v-layout>
+    </v-container>
+  </v-app>
 </template>
 
 <script>

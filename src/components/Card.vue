@@ -1,7 +1,5 @@
 <template>
-  <v-container>
-    <v-layout>
-      <v-flex xs12 sm6 offset-sm3>
+    <div>
         <v-card hover="true">
           <v-card-title primary-title @click="detailed = !detailed">
             <div class="headline"> {{content.name}}</div>
@@ -31,9 +29,7 @@
             <v-spacer></v-spacer>
           </v-card-actions>
         </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+    </div>
 </template>
 
 <script>
