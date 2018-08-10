@@ -9,10 +9,15 @@ export default new Vuex.Store({
   },
   mutations: {
     addCard (state, id) {
-      state.cards.push(id)
+      if (!state.cards.includes(id)) {
+        state.cards.push(id)
+      }
     },
     deleteCard (state, id) {
       state.cards.splice(state.cards.indexOf(id), 1)
+    },
+    deleteAll (state) {
+      state.cards = []
     }
   }
 })

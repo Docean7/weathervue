@@ -1,22 +1,25 @@
 <template>
   <v-app>
-    <v-container grid-list-md>
-      <v-layout justify-center>
+    <v-container>
+      <v-layout>
+        <div>
+          <v-btn large color="primary" @click="updateAll">Update all <v-icon>hourglass_full</v-icon></v-btn>
+        </div>
+        <v-spacer></v-spacer>
+        <div>
+          <v-btn large color="error" @click="deleteAll">Delete all <v-icon>delete_forever</v-icon></v-btn>
+        </div>
+      </v-layout>
+      <v-layout justify-center row>
         <v-flex xs12 sm6 d-flex>
-          <v-select
-            v-model="selected"
-            item-text="name"
-            item-value="id"
-            :items="cities"
-            label="Select city"
-          ></v-select>
+          <multiselect v-model="selected" :options="cities" placeholder="Select city" label="name" track-by="name"></multiselect>
         </v-flex>
         <div class="text-xs-center">
           <v-btn @click="addCard" round color="primary" dark>Add city</v-btn>
         </div>
       </v-layout>
-      <v-layout align-center justify-space-around wrap>
-        <card class="my-4" v-for="card in cards" :key="card" :cityId="card" @delete-event="deleteCard"></card>
+      <v-layout justify-space-around wrap>
+        <card-item class="my-4" v-for="card in cards" :key="card" :city-id="card" @delete-event="deleteCard"></card-item>
       </v-layout>
     </v-container>
   </v-app>
@@ -25,14 +28,19 @@
 <script>
 /* eslint-disable no-undef */
 
-import Card from './Card'
+import CardItem from './CardItem'
+import Multiselect from 'vue-multiselect'
+import { EventBus } from './event-bus'
 
 export default {
   name: 'CardList',
-  components: {Card},
+  components: {CardItem, Multiselect},
   data () {
     return {
-      selected: '',
+      selected: {
+        name: 'Kharkiv',
+        id: '706483'
+      },
       cities: [{name: 'Kharkiv', id: 706483}, {name: 'Kiev', id: 703448}, {
         name: 'London',
         id: 4298960
@@ -47,15 +55,23 @@ export default {
   },
   methods: {
     addCard: function () {
-      this.$store.commit('addCard', this.selected)
+      if (this.selected) {
+        this.$store.commit('addCard', this.selected.id)
+      }
     },
     deleteCard: function (id) {
       this.$store.commit('deleteCard', id)
+    },
+    updateAll: function () {
+      EventBus.$emit('updateAll')
+    },
+    deleteAll: function () {
+      this.$store.commit('deleteAll')
     }
   }
 }
 </script>
-
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
 
 </style>
