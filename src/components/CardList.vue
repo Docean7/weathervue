@@ -12,7 +12,13 @@
       </v-layout>
       <v-layout justify-center row>
         <v-flex xs12 sm6 d-flex>
-          <multiselect v-model="selected" :options="cities" placeholder="Select city" label="name" track-by="name"></multiselect>
+          <v-text-field
+            v-model="cityName"
+            label="Solo"
+            placeholder="Enter city name"
+            solo
+            clearable
+          ></v-text-field>
         </v-flex>
         <div class="text-xs-center">
           <v-btn @click="addCard" round color="primary" dark>Add city</v-btn>
@@ -31,21 +37,14 @@
 import CardItem from './CardItem'
 import Multiselect from 'vue-multiselect'
 import { EventBus } from './event-bus'
+import axios from 'axios'
 
 export default {
   name: 'CardList',
   components: {CardItem, Multiselect},
   data () {
     return {
-      selected: {
-        name: 'Kharkiv',
-        id: '706483'
-      },
-      cities: [{name: 'Kharkiv', id: 706483}, {name: 'Kiev', id: 703448}, {
-        name: 'London',
-        id: 4298960
-      }, {name: 'New York', id: 5128638},
-      {name: 'Vienna', id: 2761369}, {name: 'Paris', id: 2968815}]
+      cityName: ''
     }
   },
   computed: {
@@ -55,12 +54,25 @@ export default {
   },
   methods: {
     addCard: function () {
-      if (this.selected) {
-        this.$store.commit('addCard', this.selected.id)
+      if (this.cityName) {
+        axios.get('http://api.openweathermap.org/data/2.5/weather?q=' + this.cityName + '&APPID=1f9ddba14ce2ca6ba236f881ce267b8f')
+          .then((response) => {
+            if (!this.$store.state.cards.includes(response.data.id)) {
+              this.$store.commit('addCard', response.data.id)
+            } else {
+              alert('This city is already added')
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
+            alert('City not found')
+          })
       }
     },
     deleteCard: function (id) {
-      this.$store.commit('deleteCard', id)
+      if (confirm('Delete this card ?')) {
+        this.$store.commit('deleteCard', id)
+      }
     },
     updateAll: function () {
       EventBus.$emit('updateAll')
@@ -71,7 +83,6 @@ export default {
   }
 }
 </script>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
 
 </style>

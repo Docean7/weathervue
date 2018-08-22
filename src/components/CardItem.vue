@@ -1,18 +1,18 @@
 <template>
   <div>
     <v-card hover="true">
-      <v-card-title primary-title @click="detailed = !detailed">
+      <v-card-title primary-title @click="goFull">
         <div>
           <div class="headline"> {{content.name}}</div>
           <span class="grey--text">{{updateTime}}</span>
         </div>
       </v-card-title>
       <v-slide-y-transition>
-        <v-card-text @click="detailed = !detailed">
+        <v-card-text @click="goFull">
           Temperature: {{(content.main.temp - 273.1).toFixed(0)}} &deg;C
           <br>
           Description:{{content.weather[0].description}}
-          <div v-show="detailed">
+          <div v-show="fullView">
             Wind: {{content.wind.speed}}m/s
             <br>
             Clouds: {{content.clouds.all}}%
@@ -25,11 +25,8 @@
       </v-slide-y-transition>
       <v-card-actions>
         <v-btn flat @click="getContent" icon color="green"> <v-icon>cached</v-icon></v-btn>
-        <v-btn flat icon color="red" @click="$emit('delete-event', id)"><v-icon>delete</v-icon></v-btn>
         <v-spacer></v-spacer>
-        <v-btn icon @click="detailed = !detailed">
-          <v-icon>{{ detailed ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-        </v-btn>
+        <v-btn v-if="!fullView" flat icon color="red" @click="$emit('delete-event', id)"><v-icon>delete</v-icon></v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -37,7 +34,8 @@
 
 <script>
 import { EventBus } from './event-bus'
-const axios = require('axios')
+import axios from 'axios'
+
 export default {
   name: 'CardItem',
   props: ['cityId'],
@@ -45,8 +43,12 @@ export default {
     return {
       id: this.cityId,
       content: {},
-      detailed: false,
       updateTime: ''
+    }
+  },
+  computed: {
+    fullView () {
+      return this.$store.state.fullView
     }
   },
   mounted: function () {
@@ -61,10 +63,14 @@ export default {
           this.content = response.data
         })
         .catch(function (error) {
-          // handle error
           console.log(error)
         })
       this.updateTime = new Date().toLocaleTimeString()
+    },
+    goFull: function () {
+      if (!this.fullView) {
+        this.$router.push(`/${this.id}`)
+      }
     }
   }
 }

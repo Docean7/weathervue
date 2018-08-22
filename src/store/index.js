@@ -5,19 +5,21 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    cards: []
+    cards: [],
+    fullView: true
   },
   mutations: {
     addCard (state, id) {
-      if (!state.cards.includes(id)) {
-        state.cards.push(id)
-      }
+      state.cards.push(id)
     },
     deleteCard (state, id) {
       state.cards.splice(state.cards.indexOf(id), 1)
     },
     deleteAll (state) {
       state.cards = []
+    },
+    changeView (state) {
+      state.fullView = !state.fullView
     }
   }
 })
