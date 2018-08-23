@@ -1,32 +1,23 @@
 <template>
   <div>
     <v-card hover="true">
-      <v-card-title primary-title @click="goFull">
+      <v-card-title primary-title @click="showInfo">
         <div>
           <div class="headline"> {{content.name}}</div>
           <span class="grey--text">{{updateTime}}</span>
         </div>
       </v-card-title>
       <v-slide-y-transition>
-        <v-card-text @click="goFull">
+        <v-card-text @click="showInfo">
           Temperature: {{(content.main.temp - 273.1).toFixed(0)}} &deg;C
           <br>
           Description:{{content.weather[0].description}}
-          <div v-show="fullView">
-            Wind: {{content.wind.speed}}m/s
-            <br>
-            Clouds: {{content.clouds.all}}%
-            <br>
-            Pressure: {{content.main.pressure}} hpa
-            <br>
-            Humidity: {{content.main.humidity}}%
-          </div>
         </v-card-text>
       </v-slide-y-transition>
       <v-card-actions>
-        <v-btn flat @click="getContent" icon color="green"> <v-icon>cached</v-icon></v-btn>
+        <v-btn flat @click="getContent" icon color="green"><v-icon>cached</v-icon></v-btn>
         <v-spacer></v-spacer>
-        <v-btn v-if="!fullView" flat icon color="red" @click="$emit('delete-event', id)"><v-icon>delete</v-icon></v-btn>
+        <v-btn flat icon color="red" @click="$emit('delete-event', id)"><v-icon>delete</v-icon></v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -42,17 +33,15 @@ export default {
   data () {
     return {
       id: this.cityId,
-      content: {},
       updateTime: ''
     }
   },
   computed: {
-    fullView () {
-      return this.$store.state.fullView
+    content () {
+      return this.$store.getters.getCardById(this.id)
     }
   },
   mounted: function () {
-    this.getContent()
     EventBus.$on('updateAll', this.getContent)
   },
   methods: {
@@ -60,22 +49,24 @@ export default {
       axios.get('http://api.openweathermap.org/data/2.5/weather?id=' + this.cityId + '&APPID=1f9ddba14ce2ca6ba236f881ce267b8f')
         .then((response) => {
           console.log(response)
-          this.content = response.data
+          this.$store.commit('updateCard', response.data)
         })
         .catch(function (error) {
           console.log(error)
         })
       this.updateTime = new Date().toLocaleTimeString()
     },
-    goFull: function () {
-      if (!this.fullView) {
-        this.$router.push(`/${this.id}`)
-      }
+    showInfo: function () {
+      this.$router.push(`/${this.id}`)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  //add style
+  .card {
+    display: grid;
+    justify-content: center;
+    /*font-size: 20px;*/
+  }
 </style>

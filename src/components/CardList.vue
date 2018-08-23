@@ -25,7 +25,7 @@
         </div>
       </v-layout>
       <v-layout justify-space-around wrap>
-        <card-item class="my-4" v-for="card in cards" :key="card" :city-id="card" @delete-event="deleteCard"></card-item>
+        <card-item class="my-4" v-for="card in cards" :key="card.id" :city-id="card.id" @delete-event="deleteCard"></card-item>
       </v-layout>
     </v-container>
   </v-app>
@@ -57,8 +57,8 @@ export default {
       if (this.cityName) {
         axios.get('http://api.openweathermap.org/data/2.5/weather?q=' + this.cityName + '&APPID=1f9ddba14ce2ca6ba236f881ce267b8f')
           .then((response) => {
-            if (!this.$store.state.cards.includes(response.data.id)) {
-              this.$store.commit('addCard', response.data.id)
+            if (!this.$store.state.cards.find(info => info.id === response.data.id)) {
+              this.$store.commit('addCard', response.data)
             } else {
               alert('This city is already added')
             }
@@ -78,7 +78,9 @@ export default {
       EventBus.$emit('updateAll')
     },
     deleteAll: function () {
-      this.$store.commit('deleteAll')
+      if (confirm('Do you want to delete all cards?')) {
+        this.$store.commit('deleteAll')
+      }
     }
   }
 }
