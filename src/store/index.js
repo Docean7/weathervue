@@ -9,7 +9,7 @@ export default new Vuex.Store({
   },
   getters: {
     getCardById: (state) => (id) => {
-      return state.cards.find(el => el.id === id)
+      return state.cards.find(el => el.id == id)
     }
   },
   mutations: {
