@@ -9,7 +9,8 @@ export default new Vuex.Store({
   },
   getters: {
     getCardById: (state) => (id) => {
-      return state.cards.find(el => el.id === id)
+      // eslint-disable-next-line eqeqeq
+      return state.cards.find(el => el.id == id)
     }
   },
   mutations: {

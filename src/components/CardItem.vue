@@ -4,11 +4,11 @@
       <v-card-title primary-title @click="showInfo">
         <div>
           <div class="headline"> {{content.name}}</div>
-          <span class="grey--text">{{updateTime}}</span>
+          <span id="timeLine" :style="{opacity: timeOpacity}">{{updateTime}}</span>
         </div>
       </v-card-title>
       <v-slide-y-transition>
-        <v-card-text @click="showInfo">
+        <v-card-text @click="showInfo" class="card-text">
           Temperature: {{(content.main.temp - 273.1).toFixed(0)}} &deg;C
           <br>
           Description:{{content.weather[0].description}}
@@ -17,9 +17,46 @@
       <v-card-actions>
         <v-btn flat @click="getContent" icon color="green"><v-icon>cached</v-icon></v-btn>
         <v-spacer></v-spacer>
-        <v-btn flat icon color="red" @click="$emit('delete-event', id)"><v-icon>delete</v-icon></v-btn>
+        <v-btn flat icon color="red" @click="deleteCardDialog=true"><v-icon>delete</v-icon></v-btn>
       </v-card-actions>
     </v-card>
+    <v-dialog
+      v-model="deleteCardDialog"
+      width="500"
+    >
+      <v-card>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        >
+          Confirm
+        </v-card-title>
+
+        <v-card-text>
+          Do you want to delete this card ?
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            flat="flat"
+            @click="deleteCardDialog = false"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="red"
+            flat
+            @click="$emit('delete-event', id)"
+          >
+            Delete card
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -33,7 +70,9 @@ export default {
   data () {
     return {
       id: this.cityId,
-      updateTime: ''
+      updateTime: new Date().toLocaleTimeString(),
+      deleteCardDialog: false,
+      timeOpacity: 0
     }
   },
   computed: {
@@ -41,7 +80,7 @@ export default {
       return this.$store.getters.getCardById(this.id)
     }
   },
-  mounted: function () {
+  mounted () {
     EventBus.$on('updateAll', this.getContent)
   },
   methods: {
@@ -55,6 +94,7 @@ export default {
           console.log(error)
         })
       this.updateTime = new Date().toLocaleTimeString()
+      this.timeOpacity = 1
     },
     showInfo: function () {
       this.$router.push(`/${this.id}`)
@@ -64,9 +104,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .card {
-    display: grid;
-    justify-content: center;
-    /*font-size: 20px;*/
+.card-text {
+  display: grid;
+  justify-content: center;
+}
+
+#timeLine {
+    color:gray;
   }
 </style>

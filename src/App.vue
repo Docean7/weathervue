@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-    <card-list></card-list>
-    <router-view></router-view>
+    <v-app>
+        <router-view></router-view>
+    </v-app>
   </div>
 </template>
 
