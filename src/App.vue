@@ -1,9 +1,9 @@
 <template>
-  <div id="app">
-    <v-app>
+    <div id="app">
+      <v-app>
         <router-view></router-view>
-    </v-app>
-  </div>
+      </v-app>
+    </div>
 </template>
 
 <script>
@@ -15,3 +15,12 @@ export default {
   components: {CardList, Card, CityInfo}
 }
 </script>
+<style>
+  #app {
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    background-image: url("./assets/world.jpg");
+    background-size: cover;
+  }
+</style>

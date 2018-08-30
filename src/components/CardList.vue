@@ -50,7 +50,7 @@
             clearable
           ></v-text-field>
           <div class="text-xs-center">
-            <v-btn @click="addCard" round color="primary" dark>Add city</v-btn>
+            <v-btn @click="addCard" round color="green" dark>Add city</v-btn>
           </div>
         </div>
         <transition-group name="list" tag="card-item" class="list">
@@ -135,7 +135,7 @@ export default {
     grid-row: 3;
     grid-column: 2/-2;
     display: grid;
-    grid-template: 1fr/repeat(auto-fit, minmax(400px, 1fr));
+    grid-template: 1fr/repeat(auto-fit, minmax(400px, .5fr));
     grid-gap: 20px;
   }
 

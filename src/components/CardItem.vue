@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card hover="true">
+    <v-card hover="true" class="card" transparent>
       <v-card-title primary-title @click="showInfo">
         <div>
           <div class="headline"> {{content.name}}</div>
@@ -108,12 +108,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card-text {
-  display: grid;
-  justify-content: center;
-}
-
-#timeLine {
-    color:gray;
+  .card {
+    background: rgb(240,249,255);
+    background: linear-gradient(45deg, rgba(240,249,255,1) 5%,rgba(240,249,255,1) 5%,rgba(203,235,255,1) 47%,rgba(161,219,255,1) 78%);
+    opacity: .8;
   }
+  .card-text {
+    display: grid;
+    justify-content: center;
+    font-size: 18px;
+    opacity: 1;
+  }
+
+  #timeLine {
+      color:gray;
+    }
 </style>
