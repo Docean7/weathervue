@@ -50,7 +50,7 @@
           <v-btn
             color="red"
             flat
-            @click="$emit('delete-event', id)"
+            @click="deleteCard"
           >
             Delete card
           </v-btn>
@@ -98,6 +98,10 @@ export default {
     },
     showInfo: function () {
       this.$router.push(`/${this.id}`)
+    },
+    deleteCard: function () {
+      EventBus.$off('updateAll')
+      this.$emit('delete-event', this.id)
     }
   }
 }
