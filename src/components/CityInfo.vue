@@ -19,7 +19,7 @@
         <br>
         Humidity: {{content.main.humidity}}%
         <br>
-        <v-btn id="back-btn" color="primary" @click="$router.push(`/`)">Go Back</v-btn>
+        <v-btn id="back-btn" color="error" @click="$router.push(`/`)">Go Back</v-btn>
       </v-card-text>
     </v-card>
   </div>
@@ -59,8 +59,9 @@ export default {
     display: grid;
     justify-items: center;
 
-    background: rgb(255,254,249);
-    background: linear-gradient(45deg, rgba(255,254,249,1) 0%,rgba(251,245,201,1) 0%);
+    background: rgb(240,249,255);
+    background: linear-gradient(45deg, rgba(240,249,255,1) 5%,rgba(240,249,255,1) 5%,rgba(203,235,255,1) 47%,rgba(161,219,255,1) 78%);
+    opacity: .8;
   }
 
 </style>
